@@ -9,6 +9,12 @@ type LinkedList struct {
 	Head *ListNode
 }
 
+func NewLinkedList() *LinkedList {
+	return &LinkedList{
+		Head: nil,
+	}
+}
+
 func (list *LinkedList) InsertFront(val int) {
 	newNode := &ListNode{Val: val}
 
@@ -49,21 +55,23 @@ func (list *LinkedList) Search(target int) *ListNode {
 }
 
 func (list *LinkedList) Delete(target int) bool {
-	deleted := false
-	curr := list.Head
-	prev := list.Head
-	for curr != nil {
+	var prev *ListNode
 
+	for curr := list.Head; curr != nil; curr = curr.Next {
 		if curr.Val == target {
-			deleted = true
-			break
+			if prev == nil {
+				// deleting head
+				list.Head = curr.Next
+			} else {
+				// deleting middle or tail
+				prev.Next = curr.Next
+			}
+
+			return true
 		}
 
 		prev = curr
-		curr = curr.Next
 	}
 
-	prev.Next = curr.Next
-
-	return deleted
+	return false
 }
